@@ -1,0 +1,20 @@
+{
+  "name": "employee-tracker-sql",
+  "version": "1.0.0",
+  "description": "\"\"",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katepatch/Employee-Tracker-SQL.git"
+  },
+  "author": "kate patch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/katepatch/Employee-Tracker-SQL/issues"
+  },
+  "homepage": "https://github.com/katepatch/Employee-Tracker-SQL#readme"
+}
