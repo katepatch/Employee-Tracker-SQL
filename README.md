@@ -39,6 +39,8 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 ## Installation
 
+Please make sure you have [mysql2](https://www.npmjs.com/package/mysql2), [inquirer](https://www.npmjs.com/package/inquirer/v/8.2.4), and [console.table](https://www.npmjs.com/package/console.table) packages installed before running program.
+
 ## Usage
 
 ## Links

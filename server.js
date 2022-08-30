@@ -153,3 +153,39 @@ addDepartment = () => {
         });
     });
 };
+
+addRole = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'role',
+            message: 'What is the new role?',
+            validate: addRole => {
+                if (addRole) {
+                    return true;
+                } else {
+                    console.log('Please enter new role');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'What is the salary for this role?',
+            validate: addSalary => {
+                if (isNaN(addSalary)) {
+                    return true;
+                } else {
+                    console.log('Please enter salary');
+                    return false;
+                }
+            }
+        }
+    ])
+    .then(answer => {
+        const params = [answer.role, answer.salary];
+
+        const roleSql = `SELECT name, id FROM department`;
+    })
+}
