@@ -42,3 +42,5 @@ THEN I am prompted to select an employee to update and their new role and this i
 ## Usage
 
 ## Links
+
+Github: [katepatch](https://github.com/katepatch/Employee-Tracker-SQL)
