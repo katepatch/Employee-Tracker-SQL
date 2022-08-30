@@ -52,7 +52,7 @@ const infoPrompt = () => {
             ]
         }
     ])
-    .then(answers) => {
+    .then(answers => {
         const { choices } = answers;
 
         if (choices === "View All Departments") {
@@ -81,6 +81,7 @@ const infoPrompt = () => {
 
         if (choices === "Update Employee Role") {
             updateEmployee();
-        }
-    }
-}
+        };
+    });
+};
+
