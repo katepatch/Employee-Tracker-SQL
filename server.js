@@ -187,5 +187,32 @@ addRole = () => {
         const params = [answer.role, answer.salary];
 
         const roleSql = `SELECT name, id FROM department`;
-    })
-}
+
+        connection.promise().query(roleSql, (err, data) => {
+            const dept = data.map(({ name, id }) => ({ name: name, value: id }));
+
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'dept',
+                    message: 'What department is this role in?',
+                    choices: dept
+                }
+            ])
+            .then(deptChoice => {
+                const dept = deptChoice.dept;
+                params.push(dept);
+
+                const sql = `INSERT INTO role (title, salary, department_id)
+                            VALUES (?, ?, ?)`;
+
+                connection.query(sql, params, (err, result) => {
+                    if (err) throw err;
+                    console.log('Added' + answer.role + " to roles");
+
+                    showRoles();
+                });
+            });
+        });
+    });
+};
