@@ -101,8 +101,8 @@ showDepartments = () => {
 
 showRoles = () => {
     console.log('Showing all roles \n');
-    const sql = `SELECT role.id, role.title, department.name AS department FROM role
-                INNER JOIN department ON role.department_id = department.id`;
+    const sql = `SELECT roles.id, roles.title, department.name AS department FROM roles
+                INNER JOIN department ON roles.department_id = department.id`;
     
     connection.promise().query(sql, (err, rows) => {
         if (err) throw err;
@@ -113,10 +113,10 @@ showRoles = () => {
 
 showEmployees = () => {
     console.log('Showing all Employees \n');
-    const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT (manager.first_name, " ", manager.last_name) AS manager
+    const sql = `SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name AS department, roles.salary, CONCAT (manager.first_name, " ", manager.last_name) AS manager
                 FROM employee
-                    LEFT JOIN role ON employee.role_id = role id
-                    LEFT JOIN department ON role.department_id = department.id
+                    LEFT JOIN roles ON employee.roles_id = roles.id
+                    LEFT JOIN department ON roles.department_id = department.id
                     LEFT JOIN employee manager ON employee.manager_id = manager.id`;
     
     connection.promise().query(sql, (err, rows) => {
@@ -158,7 +158,7 @@ addRole = () => {
     inquirer.prompt([
         {
             type: 'input',
-            name: 'role',
+            name: 'roles',
             message: 'What is the new role?',
             validate: addRole => {
                 if (addRole) {
@@ -203,7 +203,7 @@ addRole = () => {
                 const dept = deptChoice.dept;
                 params.push(dept);
 
-                const sql = `INSERT INTO role (title, salary, department_id)
+                const sql = `INSERT INTO roles (title, salary, department_id)
                             VALUES (?, ?, ?)`;
 
                 connection.query(sql, params, (err, result) => {
@@ -237,7 +237,7 @@ addEmployee = () => {
             name: 'lastName',
             message: "What is the new employees last name?",
             validate: addLast => {
-                if(addFLast) {
+                if(addLast) {
                     return true
                 } else {
                     console.log('Please enter employees last name')
@@ -259,7 +259,7 @@ addEmployee = () => {
             inquirer.prompt([
                 {
                     type: 'list',
-                    name: 'role',
+                    name: 'roles',
                     message: "What is this employee's role?",
                     choices: roles
                 }
@@ -320,7 +320,7 @@ updateEmployee = () => {
             const params = [];
             params.push(employee);
 
-            const roleSql = `SELECT * FROM role`;
+            const roleSql = `SELECT * FROM roles`;
 
             connection.promise().query(roleSql, (err, data) => {
                 if (err) throw err;
@@ -330,7 +330,7 @@ updateEmployee = () => {
                 inquirer.prompt([
                     {
                         type: 'list',
-                        name: 'role',
+                        name: 'roles',
                         message: "What is the employee's new role?",
                         choices: roles
                     }
@@ -343,7 +343,7 @@ updateEmployee = () => {
                     params[0] = role
                     params[1] = employee
 
-                    const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+                    const sql = `UPDATE employee SET roles_id = ? WHERE id = ?`;
 
                     connection.query(sql, params, (err, result) => {
                         if (err) throw err;
