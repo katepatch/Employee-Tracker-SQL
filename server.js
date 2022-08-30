@@ -124,7 +124,7 @@ showEmployees = () => {
     //     console.table(rows);
     //     infoPrompt();
     // });
-    .then(([ roows ]) => {
+    .then(([ rows ]) => {
         console.log("Response: ", rows);
     })
     .catch(error => {
