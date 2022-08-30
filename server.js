@@ -119,21 +119,11 @@ showEmployees = () => {
                     LEFT JOIN department ON role.department_id = department.id
                     LEFT JOIN employee manager ON employee.manager_id = manager.id`;
     
-    // connection.promise().query(sql, (err, rows) => {
-    //     if (err) throw err;
-    //     console.table(rows);
-    //     infoPrompt();
-    // });
-    infoPrompt();
-    .then(([ rows ]) => {
-        console.log("Response: ", rows);
-    })
-    .catch(error => {
-        console.log(error);
-        throw error;
-    });
-    
-    
+    connection.promise().query(sql, (err, rows) => {
+        if (err) throw err;
+        console.table(rows);
+        infoPrompt();
+    });    
 };
 
 addDepartment = () => {
