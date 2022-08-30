@@ -1,6 +1,7 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
+const { isReadable } = require('stream');
 
 // These just popped up out of nowhere not sure how they got here
 // const Connection = require('mysql2/typings/mysql/lib/Connection');
@@ -216,3 +217,60 @@ addRole = () => {
         });
     });
 };
+
+addEmployee = () => {
+    inquirer.prompt ([
+        {
+            type: 'input', 
+            name: 'firstName',
+            message: "What is the new employees first name?",
+            validate: addFirst => {
+                if(addFirst) {
+                    return true
+                } else {
+                    console.log('Please enter employees first name')
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input', 
+            name: 'lastName',
+            message: "What is the new employees last name?",
+            validate: addLast => {
+                if(addFLast) {
+                    return true
+                } else {
+                    console.log('Please enter employees last name')
+                    return false;
+                }
+            }
+        },
+    ])
+    .then(answer => {
+        const params = [answer.firstName, answer.lastName]
+
+        const roleSql = `SELECT role.id, role.title FROM role`;
+
+        connection.promise().query(roleSql, (err, data) => {
+            if (err) throw err;
+
+            const roles = data.map(({ id, title }) => ({ name: title, value: id }));
+
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'role',
+                    message: "What is this employee's role?",
+                    choices: roles
+                }
+            ])
+            .then(roleChoice => {
+                const role = roleChoice.role;
+                params.push(role);
+
+                const managerSql =  `SELECT * FROM employee`;
+            })
+        })
+    })
+}
