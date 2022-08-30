@@ -13,7 +13,7 @@ const connection = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
-        password: '',
+        password: 'Elton!2007',
         database: 'employee_db'
     },
     console.log('Connected to employee_db database')
@@ -119,11 +119,19 @@ showEmployees = () => {
                     LEFT JOIN department ON role.department_id = department.id
                     LEFT JOIN employee manager ON employee.manager_id = manager.id`;
     
-    connection.promise().query(sql, (err, rows) => {
-        if (err) throw err;
-        console.table(rows);
-        infoPrompt();
+    // connection.promise().query(sql, (err, rows) => {
+    //     if (err) throw err;
+    //     console.table(rows);
+    //     infoPrompt();
+    // });
+    .then(([ roows ]) => {
+        console.log("Response: ", rows);
+    })
+    .catch(error => {
+        console.log(error);
+        throw error;
     });
+    infoPrompt();
     
 };
 
