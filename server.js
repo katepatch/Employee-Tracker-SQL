@@ -1,8 +1,10 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
-const Connection = require('mysql2/typings/mysql/lib/Connection');
-const { allowedNodeEnvironmentFlags } = require('process');
+
+// These just popped up out of nowhere not sure how they got here
+// const Connection = require('mysql2/typings/mysql/lib/Connection');
+// const { allowedNodeEnvironmentFlags } = require('process');
 
 const PORT = process.env.PORT || 3001;
 
@@ -85,3 +87,13 @@ const infoPrompt = () => {
     });
 };
 
+showDepartments = () => {
+    console.log('Showing all departments \n');
+    const sql = `SELECT department.id AS id, department.name AS department FROM department`;
+
+    connection.promise().query(sql, (err, rows) => {
+        if (err) throw err;
+        console.table(rows);
+        infoPrompt();
+    });
+};
