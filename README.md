@@ -2,6 +2,15 @@
 
  Module 12 Challenge
 
+ ## Table of Contents
+
+ -[User Story](#user-story)</br>
+ -[Acceptance Criteria](#acceptance-criteria)</br>
+ -[Installation](#installation)</br>
+ -[Usage](#usage)</br>
+ -[Links](#links)
+
+
 ## User Story
 
 AS A business owner</br>
