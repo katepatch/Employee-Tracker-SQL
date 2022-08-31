@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
-const { isReadable } = require('stream');
+//const { isReadable } = require('stream');  dont know where this came from??
 
 // These just popped up out of nowhere not sure how they got here
 // const Connection = require('mysql2/typings/mysql/lib/Connection');
@@ -92,7 +92,7 @@ showDepartments = () => {
     console.log('Showing all departments \n');
     const sql = `SELECT department.id AS id, department.name AS department FROM department`;
 
-    connection.promise().query(sql, (err, rows) => {
+    connection.query(sql, (err, rows) => {
         if (err) throw err;
         console.table(rows);
         infoPrompt();
@@ -101,10 +101,9 @@ showDepartments = () => {
 
 showRoles = () => {
     console.log('Showing all roles \n');
-    const sql = `SELECT roles.id, roles.title, department.name AS department FROM roles
-                INNER JOIN department ON roles.department_id = department.id`;
+    const sql = `SELECT roles.id, roles.title, department.name AS department FROM roles INNER JOIN department ON roles.department_id = department.id`;
     
-    connection.promise().query(sql, (err, rows) => {
+    connection.query(sql, (err, rows) => {
         if (err) throw err;
         console.table(rows);
         infoPrompt();
@@ -113,13 +112,9 @@ showRoles = () => {
 
 showEmployees = () => {
     console.log('Showing all Employees \n');
-    const sql = `SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name AS department, roles.salary, CONCAT (manager.first_name, " ", manager.last_name) AS manager
-                FROM employee
-                    LEFT JOIN roles ON employee.roles_id = roles.id
-                    LEFT JOIN department ON roles.department_id = department.id
-                    LEFT JOIN employee manager ON employee.manager_id = manager.id`;
+    const sql = `SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name AS department, roles.salary, CONCAT (manager.first_name, " ", manager.last_name) AS manager FROM employee LEFT JOIN roles ON employee.roles_id = roles.id LEFT JOIN department ON roles.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id`;
     
-    connection.promise().query(sql, (err, rows) => {
+    connection.query(sql, (err, rows) => {
         if (err) throw err;
         console.table(rows);
         infoPrompt();
@@ -184,11 +179,11 @@ addRole = () => {
         }
     ])
     .then(answer => {
-        const params = [answer.role, answer.salary];
+        const params = [answer.roles, answer.salary];
 
         const roleSql = `SELECT name, id FROM department`;
 
-        connection.promise().query(roleSql, (err, data) => {
+        connection.query(roleSql, (err, data) => {
             const dept = data.map(({ name, id }) => ({ name: name, value: id }));
 
             inquirer.prompt([
@@ -249,9 +244,9 @@ addEmployee = () => {
     .then(answer => {
         const params = [answer.firstName, answer.lastName]
 
-        const roleSql = `SELECT role.id, role.title FROM role`;
+        const roleSql = `SELECT roles.id, roles.title FROM roles`;
 
-        connection.promise().query(roleSql, (err, data) => {
+        connection.query(roleSql, (err, data) => {
             if (err) throw err;
 
             const roles = data.map(({ id, title }) => ({ name: title, value: id }));
@@ -284,7 +279,7 @@ addEmployee = () => {
                     const manager = managerChoice.manager;
                     params.push(manager);
 
-                    const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id
+                    const sql = `INSERT INTO employee (first_name, last_name, roles_id, manager_id
                                 VALUES (?, ?, ?, ?)`;
                     
                     connection.query(sql, params, (err, result) => {
@@ -302,7 +297,7 @@ addEmployee = () => {
 updateEmployee = () => {
     const employeeSql = `SELECT * FROM employee`;
 
-    connection.promise().query(employeeSql, (err, data) => {
+    connection.query(employeeSql, (err, data) => {
         if (err) throw err;
 
         const employees = data.map (({ id, first_name, last_name })=> ({ name: first_name + " "+ last_name, value: id }));
@@ -322,7 +317,7 @@ updateEmployee = () => {
 
             const roleSql = `SELECT * FROM roles`;
 
-            connection.promise().query(roleSql, (err, data) => {
+            connection.query(roleSql, (err, data) => {
                 if (err) throw err;
 
                 const roles = data.map(({ id, title }) => ({ name: title, value: id }));
