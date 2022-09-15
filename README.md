@@ -50,11 +50,19 @@ Then run `source seeds.sql` to seed the database.</br>
 Now that the database is set up you can exit that terminal and in the main command line you can run `node server.js` to start server.
 
 ## Technologies Used
+
 [mysql2](https://www.npmjs.com/package/mysql2)</br>
 [inquirer](https://www.npmjs.com/package/inquirer/v/8.2.4)</br>
 [console.table](https://www.npmjs.com/package/console.table)
 
 ## Preview
+
+Watch the [video](https://watch.screencastify.com/v/TFueBcSZ0DBXSHQXGgZz) walkthrough</br>
+
+![screenshot](/images/employeeTracker1.png)
+![screenshot](/images/employeeTracker2.png)
+![screenshot](/images/employeeTracker3.png)
+![screenshot](/images/employeeTracker4.png)
 
 ## Questions
 
