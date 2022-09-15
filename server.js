@@ -90,7 +90,7 @@ const infoPrompt = () => {
 
 showDepartments = () => {
     console.log('Showing all departments \n');
-    const sql = `SELECT department.id AS id, department.name AS department FROM department`;
+    const sql = `SELECT department.id, department.name AS department FROM department`;
 
     connection.query(sql, (err, rows) => {
         if (err) throw err;
@@ -101,7 +101,7 @@ showDepartments = () => {
 
 showRoles = () => {
     console.log('Showing all roles \n');
-    const sql = `SELECT roles.id, roles.title, department.name AS department FROM roles INNER JOIN department ON roles.department_id = department.id`;
+    const sql = `SELECT roles.id, roles.title, roles.salary, department.name AS department FROM roles LEFT JOIN department ON roles.department_id = department.id`;
     
     connection.query(sql, (err, rows) => {
         if (err) throw err;
@@ -112,7 +112,7 @@ showRoles = () => {
 
 showEmployees = () => {
     console.log('Showing all Employees \n');
-    const sql = `SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name AS department, roles.salary, CONCAT (manager.first_name, " ", manager.last_name) AS manager FROM employee LEFT JOIN roles ON employee.roles_id = roles.id LEFT JOIN department ON roles.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id`;
+    const sql = `SELECT employee.id, employee.first_name, employee.last_name, roles.id, department.name AS department, roles.salary, CONCAT (manager.first_name, " ", manager.last_name) AS manager FROM employee LEFT JOIN roles ON employee.roles_id = roles.id LEFT JOIN department ON roles.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id`;
     
     connection.query(sql, (err, rows) => {
         if (err) throw err;
@@ -169,7 +169,8 @@ addRole = () => {
             name: 'salary',
             message: 'What is the salary for this role?',
             validate: addSalary => {
-                if (isNaN(addSalary)) {
+                const pass = addSalary.match(/^[1-9]\d*$/)
+                if (pass) {
                     return true;
                 } else {
                     console.log('Please enter salary');
@@ -249,7 +250,7 @@ addEmployee = () => {
         connection.query(roleSql, (err, data) => {
             if (err) throw err;
 
-            const roles = data.map(({ id, title }) => ({ name: title, value: id }));
+            const roles = data.map(({ id, title }) => ({ value: id, name: title }));
 
             inquirer.prompt([
                 {
@@ -260,35 +261,39 @@ addEmployee = () => {
                 }
             ])
             .then(roleChoice => {
-                const role = roleChoice.role;
+                const role = roleChoice.roles;
                 params.push(role);
+                console.log(params)
 
                 const managerSql =  `SELECT * FROM employee`;
 
-                const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
-
-                inquirer.prompt([
-                    {
-                        type: 'list',
-                        name: 'manager',
-                        message: "Who is this employee's manager?",
-                        choices: managers
-                    }
-                ])
-                .then(managerChoice => {
-                    const manager = managerChoice.manager;
-                    params.push(manager);
-
-                    const sql = `INSERT INTO employee (first_name, last_name, roles_id, manager_id
-                                VALUES (?, ?, ?, ?)`;
+                connection.query(managerSql, (err, result) => {
+                    if (err) throw err;
+                    const managers = result.map(({ id, first_name, last_name }) => ({ value: id, name: first_name + " "+ last_name }));
                     
-                    connection.query(sql, params, (err, result) => {
-                        if (err) throw err;
-                        console.log('New employee added');
-
-                        showEmployees();
+                    inquirer.prompt([
+                        {
+                            type: 'list',
+                            name: 'manager',
+                            message: "Who is this employee's manager?",
+                            choices: managers
+                        }
+                    ])
+                    .then(managerChoice => {
+                        const manager = managerChoice.manager;
+                        params.push(manager);
+    
+                        const sql = `INSERT INTO employee (first_name, last_name, roles_id, manager_id)
+                                    VALUES (?, ?, ?, ?)`;
+                        
+                        connection.query(sql, params, (err, result) => {
+                            if (err) throw err;
+                            console.log('New employee added');
+    
+                            showEmployees();
+                        });
                     });
-                });
+                })               
             });
         });
     });
@@ -331,7 +336,7 @@ updateEmployee = () => {
                     }
                 ])
                 .then(roleChoice => {
-                    const role = roleChoice.role;
+                    const role = roleChoice.roles;
                     params.push(role);
 
                     let employee = params[0]

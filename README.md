@@ -1,14 +1,18 @@
 # Employee Tracker SQL
 
- Module 12 Challenge
+ SQL Project
+
+## Descritption
+
+This project has a CMS interface that allows non-developers an easy way to access and interact with databases.  Here I have created a database for an employer to view all aspects within their company.  Keep track of departments, roles, salaries, and employees.  Employers can even add and update aspects while in the interface.  
 
 ## Table of Contents
 
  -[User Story](#user-story)</br>
- -[Acceptance Criteria](#acceptance-criteria)</br>
+ -[Project Criteria](#project-criteria)</br>
  -[Installation](#installation)</br>
- -[Usage](#usage)</br>
- -[Links](#links)
+ -[Preview](#preview)</br>
+ -[Questions](#questions)
 
 ## User Story
 
@@ -16,7 +20,7 @@ AS A business owner</br>
 I WANT to be able to view and manage the departments, roles, and employees in my company</br>
 SO THAT I can organize and plan my business
 
-## Acceptance Criteria
+## Project Criteria
 
 GIVEN a command-line application that accepts user input</br>
 WHEN I start the application</br>
@@ -38,10 +42,22 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 ## Installation
 
-Please make sure you have [mysql2](https://www.npmjs.com/package/mysql2), [inquirer](https://www.npmjs.com/package/inquirer/v/8.2.4), and [console.table](https://www.npmjs.com/package/console.table) packages installed before running program.
+To install this project please clone the repository.</br>
+After cloning open the command line in your terminal and run `npm i` to install packages.</br>
+Once packages are installed open a new terminal in the `db` folder.  In this terminal you will run `mysql -u root -p` and when prompted please enter your mysql password.</br>
+When mysql is open run `source schema.sql` to create database</br>
+Then run `source seeds.sql` to seed the database.</br>
+Now that the database is set up you can exit that terminal and in the main command line you can run `node server.js` to start server.
 
-## Usage
+## Technologies Used
+[mysql2](https://www.npmjs.com/package/mysql2)</br>
+[inquirer](https://www.npmjs.com/package/inquirer/v/8.2.4)</br>
+[console.table](https://www.npmjs.com/package/console.table)
 
-## Links
+## Preview
 
-Github: [katepatch](https://github.com/katepatch/Employee-Tracker-SQL)
+## Questions
+
+If you have questions regarding this project or others you can reach me by:</br>
+Email: kate.epatch@gmail.com</br>
+Github: [katepatch](https://github.com/katepatch)
